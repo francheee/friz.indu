@@ -3,246 +3,504 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fliz Indumentaria Deportiva Personalizada</title>
+    <title>Friz Indu · Recursos para productos</title>
     <style>
+        :root {
+            color-scheme: light;
+            --primary: #1d4ed8;
+            --primary-dark: #1e40af;
+            --surface: #f8fafc;
+            --border: #e2e8f0;
+            --text: #0f172a;
+            --muted: #475569;
+            --shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
+            font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+            background: var(--surface);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         header {
-            background-color: #4CAF50;
+            padding: 2.5rem 1.5rem 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
             color: white;
-            padding: 15px 20px;
-            text-align: center;
+            box-shadow: var(--shadow);
         }
 
-        nav {
-            display: flex;
-            justify-content: center;
-            background-color: #333;
+        header h1 {
+            margin: 0 0 0.75rem;
+            font-size: clamp(2rem, 3vw + 1rem, 3.4rem);
+            letter-spacing: -0.02em;
         }
 
-        nav a {
-            color: white;
-            padding: 14px 20px;
-            text-decoration: none;
-            text-align: center;
-        }
-
-        nav a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-
-        .hero {
-            text-align: center;
-            padding: 50px 20px;
-            background-color: #f4f4f4;
-        }
-
-        .hero h1 {
+        header p {
             margin: 0;
-            font-size: 2.5em;
+            font-size: clamp(1rem, 1vw + 0.9rem, 1.2rem);
+            color: rgba(255, 255, 255, 0.85);
         }
 
-        .catalog {
-            padding: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-        }
-
-        .product {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 10px;
-            width: calc(33% - 40px);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .product img {
+        main {
+            flex: 1;
+            padding: clamp(1.5rem, 3vw, 3rem);
+            max-width: 1100px;
             width: 100%;
-            border-radius: 5px;
+            margin: 0 auto;
         }
 
-        .product h3 {
-            text-align: center;
+        .grid-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
         }
 
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
+        .product-btn {
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            background: white;
+            text-align: left;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
             position: relative;
-            bottom: 0;
+            overflow: hidden;
+        }
+
+        .product-btn::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(37, 99, 235, 0));
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .product-btn:hover,
+        .product-btn:focus {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+            border-color: rgba(29, 78, 216, 0.4);
+            outline: none;
+        }
+
+        .product-btn:hover::after,
+        .product-btn:focus::after {
+            opacity: 1;
+        }
+
+        .product-btn h2 {
+            margin: 0 0 0.35rem;
+            font-size: 1.2rem;
+        }
+
+        .product-btn p {
+            margin: 0;
+            font-size: 0.95rem;
+            color: var(--muted);
+        }
+
+        .details-card {
+            background: white;
+            border-radius: 24px;
+            padding: clamp(1.75rem, 3vw, 2.5rem);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            display: grid;
+            gap: 2rem;
+        }
+
+        .details-header h2 {
+            margin: 0 0 0.75rem;
+            font-size: clamp(1.8rem, 2vw + 1rem, 2.4rem);
+        }
+
+        .details-header p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 1rem;
+        }
+
+        .text-snippets ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .snippet {
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1rem 1.1rem;
+            display: grid;
+            gap: 0.75rem;
+            background: #f8fafc;
+        }
+
+        .snippet p {
+            margin: 0;
+            font-size: 0.98rem;
+            line-height: 1.5;
+        }
+
+        .snippet button {
+            justify-self: start;
+        }
+
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .media-card {
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+        }
+
+        .media-card img {
             width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .media-card footer {
+            padding: 1rem 1.1rem 1.25rem;
+            display: grid;
+            gap: 0.75rem;
+            background: white;
+        }
+
+        .media-card footer h4 {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .media-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: none;
+            border-radius: 999px;
+            padding: 0.55rem 1.1rem;
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.2s ease;
+        }
+
+        button:hover,
+        button:focus {
+            background: var(--primary-dark);
+            outline: none;
+        }
+
+        .ghost-btn {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+        }
+
+        .ghost-btn:hover,
+        .ghost-btn:focus {
+            background: rgba(37, 99, 235, 0.2);
+            color: var(--primary-dark);
+        }
+
+        .status {
+            position: fixed;
+            left: 50%;
+            bottom: 32px;
+            transform: translateX(-50%);
+            background: #0f172a;
+            color: white;
+            padding: 0.85rem 1.4rem;
+            border-radius: 999px;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.2);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .status.visible {
+            opacity: 0.96;
+        }
+
+        footer.site-footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 2.5rem 1.25rem 1.75rem;
+            }
+
+            .media-card img {
+                height: 160px;
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Fliz Indumentaria Deportiva Personalizada</h1>
+        <h1>Catálogo rápido de recursos</h1>
+        <p>Seleccioná un tipo de producto y obtené textos sugeridos e imágenes listas para compartir.</p>
     </header>
 
-    <nav>
-        <a href="#inicio">Inicio</a>
-        <a href="#catalogo">Catálogo</a>
-        <a href="#contacto">Contacto</a>
-    </nav>
+    <main>
+        <section aria-label="Listado de tipos de productos">
+            <div class="grid-buttons" id="productButtons"></div>
+        </section>
 
-    <section class="hero" id="inicio">
-        <h1>Bienvenido a Fliz</h1>
-        <p>Personalizamos indumentaria deportiva para clubes y equipos.</p>
-    </section>
+        <section aria-live="polite" aria-label="Detalle del producto seleccionado" id="productDetails" hidden>
+            <article class="details-card">
+                <div class="details-header">
+                    <h2 id="productTitle"></h2>
+                    <p id="productDescription"></p>
+                </div>
 
-    <section class="catalog" id="catalogo">
-        <div class="product">
-            <img src="https://via.placeholder.com/300" alt="Producto 1">
-            <h3>Conjunto de Verano</h3>
-            <p>Camiseta y short deportivos, disponibles en varias tallas.</p>
-        </div>
-        <div class="product">
-            <img src="https://via.placeholder.com/300" alt="Producto 2">
-            <h3>Conjunto de Invierno</h3>
-            <p>Campera y pantalón deportivos para el frío.</p>
-        </div>
-        <div class="product">
-            <img src="https://via.placeholder.com/300" alt="Producto 3">
-            <h3>Remeras</h3>
-            <p>Disponibles en blanco y gris, ideales para personalizar.</p>
-        </div>
-    </section>
+                <div class="text-snippets">
+                    <h3>Textos sugeridos</h3>
+                    <ul id="textList"></ul>
+                </div>
 
-    <footer>
-        <p>© 2025 Fliz Indumentaria Deportiva Personalizada. Todos los derechos reservados.</p>
+                <div class="media-section">
+                    <h3>Imágenes destacadas</h3>
+                    <div class="media-grid" id="imageGrid"></div>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <div class="status" id="statusToast" role="status" aria-live="assertive"></div>
+
+    <footer class="site-footer">
+        © 2025 Friz Indu · Material rápido para redes y clientes.
     </footer>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fliz Indumentaria Deportiva Personalizada</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+
+    <script>
+        const catalog = [
+            {
+                id: "banderas",
+                title: "Banderas personalizadas",
+                description: "Diseños listos para hinchadas, clubes y eventos especiales.",
+                texts: [
+                    "🔥 Hacé que tu tribuna se note con banderas personalizadas desde 1.20 m de ancho.",
+                    "🎨 Estampado full color y telas resistentes al viento para uso en interior o exterior.",
+                    "⏱️ Entregas en 7 días hábiles y descuentos para pedidos por volumen."
+                ],
+                images: [
+                    {
+                        src: "https://images.unsplash.com/photo-1455732063391-5f50f8a0b5b0?auto=format&fit=crop&w=800&q=80",
+                        alt: "Bandera ondeando en un estadio",
+                        title: "Bandera estadio"
+                    },
+                    {
+                        src: "https://images.unsplash.com/photo-1530546177248-e81d6cd834c6?auto=format&fit=crop&w=800&q=80",
+                        alt: "Banderas coloridas en un festival",
+                        title: "Set de banderas"
+                    }
+                ]
+            },
+            {
+                id: "camisetas",
+                title: "Camisetas deportivas",
+                description: "Uniformes técnicos con telas respirables y estampado sublimado de alta definición.",
+                texts: [
+                    "💨 Tela dry-fit liviana para entrenamientos intensos y torneos.",
+                    "👕 Personalizá nombre, número y sponsors sin costo extra.",
+                    "🛡️ Costuras reforzadas y protección UV 30+ ideal para deportes al aire libre."
+                ],
+                images: [
+                    {
+                        src: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=800&q=80",
+                        alt: "Jugadores con camisetas deportivas personalizadas",
+                        title: "Equipo uniforme"
+                    },
+                    {
+                        src: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80",
+                        alt: "Camisetas deportivas colgadas",
+                        title: "Colección camisetas"
+                    }
+                ]
+            },
+            {
+                id: "merchandising",
+                title: "Merchandising express",
+                description: "Kit promocional con gorras, mochilas y botellas personalizadas.",
+                texts: [
+                    "🎁 Armamos packs personalizados con tu logo listos para entregar.",
+                    "🚀 Producción express en 72 hs para activaciones y lanzamientos.",
+                    "♻️ Opciones eco-friendly con materiales reciclados y tintas al agua."
+                ],
+                images: [
+                    {
+                        src: "https://images.unsplash.com/photo-1462212210333-335063b676d3?auto=format&fit=crop&w=800&q=80",
+                        alt: "Gorras promocionales coloridas",
+                        title: "Gorras personalizadas"
+                    },
+                    {
+                        src: "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&w=800&q=80",
+                        alt: "Botellas de aluminio y cuadernos para merchandising",
+                        title: "Kit corporativo"
+                    }
+                ]
+            }
+        ];
+
+        const productButtons = document.getElementById("productButtons");
+        const productDetails = document.getElementById("productDetails");
+        const productTitle = document.getElementById("productTitle");
+        const productDescription = document.getElementById("productDescription");
+        const textList = document.getElementById("textList");
+        const imageGrid = document.getElementById("imageGrid");
+        const statusToast = document.getElementById("statusToast");
+
+        function showStatus(message) {
+            statusToast.textContent = message;
+            statusToast.classList.add("visible");
+            clearTimeout(showStatus.timeoutId);
+            showStatus.timeoutId = setTimeout(() => {
+                statusToast.classList.remove("visible");
+            }, 2200);
         }
 
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 20px;
-            text-align: center;
+        async function copyImageToClipboard(url, title) {
+            if (!navigator.clipboard || typeof ClipboardItem === "undefined") {
+                await navigator.clipboard?.writeText(url);
+                showStatus("URL copiada: " + title);
+                return;
+            }
+
+            try {
+                const response = await fetch(url, { mode: "cors" });
+                const blob = await response.blob();
+                const item = new ClipboardItem({ [blob.type]: blob });
+                await navigator.clipboard.write([item]);
+                showStatus("Imagen copiada al portapapeles");
+            } catch (error) {
+                await navigator.clipboard.writeText(url);
+                showStatus("No se pudo copiar la imagen, se copió el enlace.");
+            }
         }
 
-        nav {
-            display: flex;
-            justify-content: center;
-            background-color: #333;
+        async function copyTextSnippet(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                showStatus("Texto copiado ✔");
+            } catch (error) {
+                showStatus("No se pudo copiar. Copiá manualmente.");
+            }
         }
 
-        nav a {
-            color: white;
-            padding: 14px 20px;
-            text-decoration: none;
-            text-align: center;
+        function downloadImage(url, title) {
+            const anchor = document.createElement("a");
+            anchor.href = url;
+            anchor.download = title.replace(/\s+/g, "-").toLowerCase();
+            document.body.appendChild(anchor);
+            anchor.click();
+            document.body.removeChild(anchor);
+            showStatus("Descarga iniciada");
         }
 
-        nav a:hover {
-            background-color: #ddd;
-            color: black;
+        function renderProduct(product) {
+            productTitle.textContent = product.title;
+            productDescription.textContent = product.description;
+
+            textList.innerHTML = "";
+            product.texts.forEach((text) => {
+                const li = document.createElement("li");
+                li.className = "snippet";
+
+                const paragraph = document.createElement("p");
+                paragraph.textContent = text;
+
+                const copyBtn = document.createElement("button");
+                copyBtn.type = "button";
+                copyBtn.textContent = "Copiar texto";
+                copyBtn.addEventListener("click", () => copyTextSnippet(text));
+
+                li.appendChild(paragraph);
+                li.appendChild(copyBtn);
+                textList.appendChild(li);
+            });
+
+            imageGrid.innerHTML = "";
+            product.images.forEach((image) => {
+                const card = document.createElement("article");
+                card.className = "media-card";
+
+                const img = document.createElement("img");
+                img.src = image.src;
+                img.alt = image.alt;
+                img.loading = "lazy";
+
+                const footer = document.createElement("footer");
+
+                const heading = document.createElement("h4");
+                heading.textContent = image.title;
+
+                const actions = document.createElement("div");
+                actions.className = "media-actions";
+
+                const copyImageBtn = document.createElement("button");
+                copyImageBtn.type = "button";
+                copyImageBtn.textContent = "Copiar";
+                copyImageBtn.addEventListener("click", () => copyImageToClipboard(image.src, image.title));
+
+                const downloadBtn = document.createElement("button");
+                downloadBtn.type = "button";
+                downloadBtn.textContent = "Descargar";
+                downloadBtn.classList.add("ghost-btn");
+                downloadBtn.addEventListener("click", () => downloadImage(image.src, image.title));
+
+                actions.append(copyImageBtn, downloadBtn);
+                footer.append(heading, actions);
+                card.append(img, footer);
+                imageGrid.appendChild(card);
+            });
+
+            productDetails.hidden = false;
+            productDetails.scrollIntoView({ behavior: "smooth", block: "start" });
         }
 
-        .hero {
-            text-align: center;
-            padding: 50px 20px;
-            background-color: #f4f4f4;
+        function renderButtons() {
+            catalog.forEach((product) => {
+                const button = document.createElement("button");
+                button.type = "button";
+                button.className = "product-btn";
+                button.innerHTML = `<h2>${product.title}</h2><p>${product.description}</p>`;
+                button.addEventListener("click", () => renderProduct(product));
+                productButtons.appendChild(button);
+            });
         }
 
-        .hero h1 {
-            margin: 0;
-            font-size: 2.5em;
-        }
-
-        .catalog {
-            padding: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-        }
-
-        .product {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 10px;
-            width: calc(33% - 40px);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .product img {
-            width: 100%;
-            border-radius: 5px;
-        }
-
-        .product h3 {
-            text-align: center;
-        }
-
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            position: relative;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>Fliz Indumentaria Deportiva Personalizada</h1>
-    </header>
-
-    <nav>
-        <a href="#inicio">Inicio</a>
-        <a href="#catalogo">Catálogo</a>
-        <a href="#contacto">Contacto</a>
-    </nav>
-
-    <section class="hero" id="inicio">
-        <h1>Bienvenido a Fliz</h1>
-        <p>Personalizamos indumentaria deportiva para clubes y equipos.</p>
-    </section>
-
-    <section class="catalog" id="catalogo">
-        <div class="product">
-            <img src="https://via.placeholder.com/300" alt="Producto 1">
-            <h3>Conjunto de Verano</h3>
-            <p>Camiseta y short deportivos, disponibles en varias tallas.</p>
-        </div>
-        <div class="product">
-            <img src="https://via.placeholder.com/300" alt="Producto 2">
-            <h3>Conjunto de Invierno</h3>
-            <p>Campera y pantalón deportivos para el frío.</p>
-        </div>
-        <div class="product">
-            <img src="https://via.placeholder.com/300" alt="Producto 3">
-            <h3>Remeras</h3>
-            <p>Disponibles en blanco y gris, ideales para personalizar.</p>
-        </div>
-    </section>
-
-    <footer>
-        <p>© 2025 Fliz Indumentaria Deportiva Personalizada. Todos los derechos reservados.</p>
-    </footer>
+        renderButtons();
+        renderProduct(catalog[0]);
+    </script>
 </body>
 </html>
