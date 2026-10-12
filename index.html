@@ -3,245 +3,540 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fliz Indumentaria Deportiva Personalizada</title>
+    <title>Calculadora</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 20px;
-            text-align: center;
+        :root {
+            --bg-gradient-1: #0f0c29;
+            --bg-gradient-2: #302b63;
+            --bg-gradient-3: #24243e;
+            --display-bg: rgba(20, 20, 35, 0.6);
+            --btn-number: rgba(255, 255, 255, 0.08);
+            --btn-operator: rgba(255, 165, 80, 0.9);
+            --btn-function: rgba(255, 255, 255, 0.15);
+            --btn-equal: linear-gradient(135deg, #ff8c42, #ff5e62);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.5);
+            --text-operator: #1a1a2e;
+            --border: rgba(255, 255, 255, 0.1);
+            --shadow: rgba(0, 0, 0, 0.3);
         }
 
-        nav {
+        body {
+            min-height: 100vh;
             display: flex;
+            align-items: center;
             justify-content: center;
-            background-color: #333;
-        }
-
-        nav a {
-            color: white;
-            padding: 14px 20px;
-            text-decoration: none;
-            text-align: center;
-        }
-
-        nav a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-
-        .hero {
-            text-align: center;
-            padding: 50px 20px;
-            background-color: #f4f4f4;
-        }
-
-        .hero h1 {
-            margin: 0;
-            font-size: 2.5em;
-        }
-
-        .catalog {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2), var(--bg-gradient-3));
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            overflow: hidden;
             padding: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
         }
 
-        .product {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 10px;
-            width: calc(33% - 40px);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        .product img {
-            width: 100%;
-            border-radius: 5px;
+        /* Floating orbs background */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .orb-1 {
+            width: 300px; height: 300px;
+            background: #ff5e62;
+            top: -100px; left: -100px;
+            animation: float 8s ease-in-out infinite;
+        }
+        .orb-2 {
+            width: 250px; height: 250px;
+            background: #5b6fee;
+            bottom: -80px; right: -80px;
+            animation: float 10s ease-in-out infinite reverse;
+        }
+        .orb-3 {
+            width: 200px; height: 200px;
+            background: #a855f7;
+            top: 50%; right: 20%;
+            animation: float 12s ease-in-out infinite;
         }
 
-        .product h3 {
-            text-align: center;
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.05); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
         }
 
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
+        .calculator {
             position: relative;
-            bottom: 0;
+            z-index: 1;
             width: 100%;
+            max-width: 380px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            padding: 28px 24px 24px;
+            box-shadow:
+                0 25px 80px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 4px;
+        }
+
+        .header .title {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .header .clock {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .display {
+            background: var(--display-bg);
+            border-radius: 22px;
+            padding: 26px 22px 22px;
+            margin-bottom: 20px;
+            min-height: 130px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: flex-end;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .display::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        }
+
+        .expression {
+            font-size: 16px;
+            color: var(--text-secondary);
+            min-height: 22px;
+            margin-bottom: 8px;
+            word-break: break-all;
+            text-align: right;
+            width: 100%;
+            font-weight: 400;
+        }
+
+        .result {
+            font-size: 46px;
+            font-weight: 300;
+            color: var(--text-primary);
+            word-break: break-all;
+            text-align: right;
+            width: 100%;
+            line-height: 1.1;
+            transition: all 0.2s ease;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .result.flash {
+            transform: scale(1.03);
+            color: #ff8c42;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        button {
+            border: none;
+            outline: none;
+            cursor: pointer;
+            font-size: 22px;
+            font-weight: 400;
+            height: 64px;
+            border-radius: 20px;
+            color: var(--text-primary);
+            background: var(--btn-number);
+            border: 1px solid var(--border);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 0; height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+        }
+
+        button:active::before {
+            width: 300px;
+            height: 300px;
+            transition: 0s;
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(0) scale(0.96);
+        }
+
+        .btn-fn {
+            background: var(--btn-function);
+            color: #ffa56b;
+            font-weight: 500;
+        }
+
+        .btn-op {
+            background: var(--btn-operator);
+            color: var(--text-operator);
+            font-weight: 600;
+            font-size: 24px;
+        }
+
+        .btn-op:hover {
+            background: #ffb070;
+        }
+
+        .btn-equal {
+            background: var(--btn-equal);
+            color: #fff;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(255, 94, 98, 0.4);
+        }
+
+        .btn-equal:hover {
+            box-shadow: 0 8px 25px rgba(255, 94, 98, 0.6);
+            filter: brightness(1.1);
+        }
+
+        .btn-zero {
+            grid-column: span 2;
+        }
+
+        .footer {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 400px) {
+            .calculator {
+                padding: 20px 16px 16px;
+            }
+            button {
+                height: 58px;
+                font-size: 20px;
+                border-radius: 18px;
+            }
+            .result {
+                font-size: 38px;
+            }
+            .display {
+                min-height: 110px;
+                padding: 20px 18px;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Fliz Indumentaria Deportiva Personalizada</h1>
-    </header>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
 
-    <nav>
-        <a href="#inicio">Inicio</a>
-        <a href="#catalogo">Catálogo</a>
-        <a href="#contacto">Contacto</a>
-    </nav>
-
-    <section class="hero" id="inicio">
-        <h1>Bienvenido a Fliz</h1>
-        <p>Personalizamos indumentaria deportiva para clubes y equipos.</p>
-    </section>
-
-    <section class="catalog" id="catalogo">
-        <div class="product">
-            <img src="https://via.placeholder.com/300" alt="Producto 1">
-            <h3>Conjunto de Verano</h3>
-            <p>Camiseta y short deportivos, disponibles en varias tallas.</p>
+    <div class="calculator">
+        <div class="header">
+            <span class="title">Calculadora</span>
+            <span class="clock" id="clock"></span>
         </div>
-        <div class="product">
-            <img src="https://via.placeholder.com/300" alt="Producto 2">
-            <h3>Conjunto de Invierno</h3>
-            <p>Campera y pantalón deportivos para el frío.</p>
-        </div>
-        <div class="product">
-            <img src="https://via.placeholder.com/300" alt="Producto 3">
-            <h3>Remeras</h3>
-            <p>Disponibles en blanco y gris, ideales para personalizar.</p>
-        </div>
-    </section>
 
-    <footer>
-        <p>© 2025 Fliz Indumentaria Deportiva Personalizada. Todos los derechos reservados.</p>
-    </footer>
+        <div class="display">
+            <div class="expression" id="expression"></div>
+            <div class="result" id="result">0</div>
+        </div>
+
+        <div class="buttons">
+            <button class="btn-fn" data-action="clear">AC</button>
+            <button class="btn-fn" data-action="delete">⌫</button>
+            <button class="btn-fn" data-action="percent">%</button>
+            <button class="btn-op" data-op="/">÷</button>
+
+            <button class="btn-num" data-num="7">7</button>
+            <button class="btn-num" data-num="8">8</button>
+            <button class="btn-num" data-num="9">9</button>
+            <button class="btn-op" data-op="*">×</button>
+
+            <button class="btn-num" data-num="4">4</button>
+            <button class="btn-num" data-num="5">5</button>
+            <button class="btn-num" data-num="6">6</button>
+            <button class="btn-op" data-op="-">−</button>
+
+            <button class="btn-num" data-num="1">1</button>
+            <button class="btn-num" data-num="2">2</button>
+            <button class="btn-num" data-num="3">3</button>
+            <button class="btn-op" data-op="+">+</button>
+
+            <button class="btn-num btn-zero" data-num="0">0</button>
+            <button class="btn-num" data-num=".">,</button>
+            <button class="btn-equal" data-action="equals">=</button>
+        </div>
+
+        <div class="footer">Soporta teclado · Enter para calcular</div>
+    </div>
+
+    <script>
+        (function () {
+            const resultEl = document.getElementById('result');
+            const expressionEl = document.getElementById('expression');
+            const clockEl = document.getElementById('clock');
+
+            let current = '0';
+            let expression = '';
+            let lastOperator = false;
+            let justEvaluated = false;
+
+            // Live clock
+            function updateClock() {
+                const now = new Date();
+                const h = String(now.getHours()).padStart(2, '0');
+                const m = String(now.getMinutes()).padStart(2, '0');
+                clockEl.textContent = `${h}:${m}`;
+            }
+            updateClock();
+            setInterval(updateClock, 30000);
+
+            function formatNumber(n) {
+                if (n === '' || n === undefined || n === null) return '0';
+                // Keep the trailing dot/comma while typing decimals
+                if (n.endsWith('.')) {
+                    const parts = n.slice(0, -1);
+                    const num = Number(parts);
+                    if (isNaN(num)) return n;
+                    return num.toLocaleString('es-ES') + ',';
+                }
+                const num = Number(n);
+                if (isNaN(num)) return n;
+                // Limit very long decimals
+                if (!Number.isInteger(num) && n.replace(/^-/, '').length > 12) {
+                    return num.toPrecision(10).replace('.', ',');
+                }
+                if (Number.isInteger(num) && Math.abs(num) > 1e15) {
+                    return num.toExponential(6).replace('.', ',');
+                }
+                return num.toLocaleString('es-ES', { maximumFractionDigits: 10 });
+            }
+
+            function toDisplayOp(op) {
+                return ({ '*': '×', '/': '÷', '-': '−', '+': '+' })[op] || op;
+            }
+
+            function updateDisplay(flash) {
+                // Show expression as typed with formatted numbers
+                const parts = expression.split(/([+\-*/])/);
+                let displayExpr = '';
+                for (const p of parts) {
+                    if (['+', '-', '*', '/'].includes(p)) {
+                        displayExpr += ' ' + toDisplayOp(p) + ' ';
+                    } else if (p !== '') {
+                        displayExpr += formatNumber(p);
+                    }
+                }
+                expressionEl.textContent = displayExpr;
+
+                resultEl.textContent = formatNumber(current);
+                if (flash) {
+                    resultEl.classList.add('flash');
+                    setTimeout(() => resultEl.classList.remove('flash'), 200);
+                }
+            }
+
+            function inputNumber(n) {
+                if (justEvaluated && !lastOperator) {
+                    // Start fresh after equals when typing a number
+                    current = '0';
+                    expression = '';
+                    justEvaluated = false;
+                }
+                if (n === '.' ) {
+                    if (current.includes('.')) return;
+                    if (current === '' || current === '0' && expression === '') {
+                        current = '0.';
+                    } else if (lastOperator) {
+                        current = '0.';
+                        lastOperator = false;
+                    } else {
+                        current = current + '.';
+                    }
+                } else {
+                    if (current === '0' && !lastOperator) {
+                        current = n;
+                    } else if (lastOperator) {
+                        current = n;
+                        lastOperator = false;
+                    } else {
+                        current = current + n;
+                    }
+                }
+                updateDisplay();
+            }
+
+            function inputOperator(op) {
+                justEvaluated = false;
+                // If expression empty, seed with current
+                if (expression === '') {
+                    expression = current + op;
+                } else {
+                    // Replace trailing operator
+                    if (lastOperator) {
+                        expression = expression.slice(0, -1) + op;
+                    } else {
+                        expression = expression + current + op;
+                    }
+                }
+                lastOperator = true;
+                current = '0';
+                updateDisplay();
+            }
+
+            function evaluate() {
+                let full;
+                if (expression === '') {
+                    return;
+                }
+                if (lastOperator) {
+                    // Use current as the right operand too (e.g. 5+ = 5+5)
+                    full = expression + current;
+                } else {
+                    full = expression + current;
+                }
+                // Sanitize: convert comma to dot for computation
+                const safe = full.replace(/,/g, '.');
+                // Only allow digits and operators
+                if (!/^-?(\d+\.?\d*)([+\-*/]\d+\.?\d*)*$/.test(safe)) {
+                    return;
+                }
+                try {
+                    // eslint-disable-next-line no-new-func
+                    const val = Function('"use strict";return (' + safe + ')')();
+                    if (val === undefined || val === null || isNaN(val)) {
+                        return;
+                    }
+                    const rounded = Math.round((val + Number.EPSILON) * 1e10) / 1e10;
+                    expression = '';
+                    current = String(rounded);
+                    justEvaluated = true;
+                    lastOperator = false;
+                    updateDisplay(true);
+                } catch (e) {
+                    /* ignore */
+                }
+            }
+
+            function clearAll() {
+                current = '0';
+                expression = '';
+                lastOperator = false;
+                justEvaluated = false;
+                updateDisplay();
+            }
+
+            function deleteLast() {
+                if (lastOperator || justEvaluated) {
+                    return;
+                }
+                if (current.length <= 1 || (current.length === 2 && current.startsWith('-'))) {
+                    current = '0';
+                } else {
+                    current = current.slice(0, -1);
+                }
+                updateDisplay();
+            }
+
+            function percent() {
+                if (current === '' || current === '0') return;
+                const num = Number(current.replace(',', '.'));
+                const val = num / 100;
+                current = String(val);
+                justEvaluated = true;
+                updateDisplay(true);
+            }
+
+            // Button clicks
+            document.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const num = btn.dataset.num;
+                    const op = btn.dataset.op;
+                    const action = btn.dataset.action;
+
+                    if (num !== undefined) inputNumber(num);
+                    else if (op !== undefined) inputOperator(op);
+                    else if (action === 'equals') evaluate();
+                    else if (action === 'clear') clearAll();
+                    else if (action === 'delete') deleteLast();
+                    else if (action === 'percent') percent();
+                });
+            });
+
+            // Keyboard support
+            document.addEventListener('keydown', (e) => {
+                const k = e.key;
+                if (/[0-9]/.test(k)) inputNumber(k);
+                else if (k === '.' || k === ',') inputNumber('.');
+                else if (['+', '-', '*', '/'].includes(k)) inputOperator(k);
+                else if (k === 'Enter' || k === '=') { e.preventDefault(); evaluate(); }
+                else if (k === 'Backspace') deleteLast();
+                else if (k === 'Escape') clearAll();
+                else if (k === '%') percent();
+            });
+
+            updateDisplay();
+        })();
+    </script>
 </body>
 </html>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fliz Indumentaria Deportiva Personalizada</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 20px;
-            text-align: center;
-        }
-
-        nav {
-            display: flex;
-            justify-content: center;
-            background-color: #333;
-        }
-
-        nav a {
-            color: white;
-            padding: 14px 20px;
-            text-decoration: none;
-            text-align: center;
-        }
-
-        nav a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-
-        .hero {
-            text-align: center;
-            padding: 50px 20px;
-            background-color: #f4f4f4;
-        }
-
-        .hero h1 {
-            margin: 0;
-            font-size: 2.5em;
-        }
-
-        .catalog {
-            padding: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-        }
-
-        .product {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 10px;
-            width: calc(33% - 40px);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .product img {
-            width: 100%;
-            border-radius: 5px;
-        }
-
-        .product h3 {
-            text-align: center;
-        }
-
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            position: relative;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>Fliz Indumentaria Deportiva Personalizada</h1>
-    </header>
-
-    <nav>
-        <a href="#inicio">Inicio</a>
-        <a href="#catalogo">Catálogo</a>
-        <a href="#contacto">Contacto</a>
-    </nav>
-
-    <section class="hero" id="inicio">
-        <h1>Bienvenido a Fliz</h1>
-        <p>Personalizamos indumentaria deportiva para clubes y equipos.</p>
-    </section>
-
-    <section class="catalog" id="catalogo">
-        <div class="product">
-            <img src="https://via.placeholder.com/300" alt="Producto 1">
-            <h3>Conjunto de Verano</h3>
-            <p>Camiseta y short deportivos, disponibles en varias tallas.</p>
-        </div>
-        <div class="product">
-            <img src="https://via.placeholder.com/300" alt="Producto 2">
-            <h3>Conjunto de Invierno</h3>
-            <p>Campera y pantalón deportivos para el frío.</p>
-        </div>
-        <div class="product">
-            <img src="https://via.placeholder.com/300" alt="Producto 3">
-            <h3>Remeras</h3>
-            <p>Disponibles en blanco y gris, ideales para personalizar.</p>
-        </div>
-    </section>
-
-    <footer>
         <p>© 2025 Fliz Indumentaria Deportiva Personalizada. Todos los derechos reservados.</p>
     </footer>
 </body>
